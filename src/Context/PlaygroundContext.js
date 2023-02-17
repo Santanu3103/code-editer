@@ -1,4 +1,3 @@
-import { getByTitle } from "@testing-library/react";
 import { createContext, useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -123,7 +122,7 @@ const PlaygroundProvider = ({ children }) => {
       return newState;
     });
   };
-  const editCardTitle = (folderId, cardID, newCardTitle) => {
+  const editPlaygroundTitle = (folderId, cardID, newCardTitle) => {
     setFolders((oldState) => {
       const newState = { ...oldState };
       newState[folderId].playgrounds[cardID].title = newCardTitle;
@@ -146,7 +145,7 @@ const PlaygroundProvider = ({ children }) => {
     addPlayground:addPlayground,
     addPlaygroundAndFolder:addPlaygroundAndFolder,
     editFolderTitle: editFolderTitle,
-    editCardTitle: editCardTitle,
+    editPlaygroundTitle: editPlaygroundTitle,
     savePlayground: savePlayground,
   }
   return (
