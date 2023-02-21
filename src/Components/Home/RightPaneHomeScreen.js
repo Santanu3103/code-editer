@@ -5,8 +5,9 @@ import { IoTrashOutline } from "react-icons/io5";
 import Card from "../Card";
 import { ModalContext } from "../../Context/ModalContext";
 import { PlaygroundContext } from "../../Context/PlaygroundContext";
-
+import { useNavigate } from "react-router-dom";
 function RightPaneHomeScreen() {
+  const navigate = useNavigate();
   const { openModal } = useContext(ModalContext);
   const { folders, deleteFolder, deleteCard } = useContext(PlaygroundContext);
   return (
@@ -77,7 +78,13 @@ function RightPaneHomeScreen() {
             {Object.entries(folder["playgrounds"]).map(
               ([playgroundId, playground]) => (
                 <Card key={playgroundId}>
-                  <div className="flex items-center justify-between">
+                  <div
+                    className="flex items-center justify-between"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/code/${folderId}/${playgroundId}`);
+                    }}
+                  >
                     <div className="flex gap-4">
                       <img src="/logo-small.png" alt="logo" />
                       <div>
@@ -85,7 +92,12 @@ function RightPaneHomeScreen() {
                         <h4>language: {playground.language}</h4>
                       </div>
                     </div>
-                    <div className="flex gap-4 items-center">
+                    <div
+                      className="flex gap-4 items-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
                       <BiEditAlt
                         size={"1.5em"}
                         onClick={() =>
