@@ -1,59 +1,64 @@
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { PlagroundContext, languageMap } from "../Context/PlaygroundContext";
+import { PlaygroundContext, languageMap } from "../Context/PlaygroundContext";
 import { ModalContext } from "../Context/ModalContext";
 import { Buffer } from "buffer";
 import axios from "axios";
+import Navbar from "../Components/Playground/Navbar";
+import EditContainer from "../Components/Playground/EditContainer";
+import InputConsole from "../Components/Playground/InputConsole";
+import OutputConsole from "../Components/Playground/OutputConsole";
 function PlayGround() {
   const { folderId, playgroundId } = useParams();
-  const { folders, savePlayground } = useContext(PlagroundContext);
+  const { folders, savePlayground } = useContext(PlaygroundContext);
   const { openModal, closeModal } = useContext(ModalContext);
-  const { language, code } = folders[folderId].playgrounds[playgroundId];
-
+  const { title, language, code } = folders[folderId].playgrounds[playgroundId];
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [currentCode, setCurrentCode] = useState(code);
   const [currentInput, setCurrentInput] = useState("");
   const [currentOutput, setCurrentOutput] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  //encoding string to base 64
+  const saveCode = () => {
+    savePlayground(folderId, playgroundId, currentCode, currentLanguage);
+  };
+
   const encode = (str) => {
     return Buffer.from(str, "binary").toString("base64");
   };
-  //decoding base64 to string
   const decode = (str) => {
     return Buffer.from(str, "base64").toString();
   };
-  // getting token for our code and std input;
-  const postSubmission = async (language_id, source_code, stdin) => {
+  // code, language, input -> token
+  const postSubmission = async (language_id, source_code, std_in) => {
     const options = {
       method: "POST",
       url: "https://judge0-ce.p.rapidapi.com/submissions",
-      params: { base64_encoded: "true", fields: "*" },
+      params: { base64_encoded: true, fields: "*" },
       headers: {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-rapidAPI-Key": "b4e5c5a05fmsh9adf6ec091523f8p165338jsncc58f31c26e1",
-        "X-RapidAPI-Host": "judge0-ce.p.rapidapir.com",
+        "X-RapidAPI-Key": "b4e5c5a05fmsh9adf6ec091523f8p165338jsncc58f31c26e1",
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
       },
       data: JSON.stringify({
         language_id: language_id,
         source_code: source_code,
-        stdin: stdin,
+        std_in: std_in,
       }),
     };
     const res = await axios.request(options);
     return res.data.token;
   };
-  // getting std out from out token with recursion
+
   const getOutput = async (token) => {
     const options = {
       method: "GET",
-      url: "https://judge0-ce.p.rapidapi.com/submissions" + token,
+      url: "https://judge0-ce.p.rapidapi.com/submissions/" + token,
       params: { base64_encoded: true, fields: "*" },
       headers: {
         "X-RapidAPI-Key": "3ed7a75b44mshc9e28568fe0317bp17b5b2jsn6d89943165d8",
-        "X-RapidAPI-Host": "judge0-ce.p.rapidapir.com",
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
       },
     };
     const res = await axios.request(options);
@@ -63,6 +68,7 @@ function PlayGround() {
     }
     return res.data;
   };
+
   const runCode = async () => {
     openModal({
       show: true,
@@ -74,16 +80,66 @@ function PlayGround() {
     });
     const language_id = languageMap[currentLanguage].id;
     const source_code = encode(currentCode);
-    const stdin = encode(currentInput);
+    const std_in = encode(currentInput);
 
-    const token = await postSubmission(language_id, source_code, stdin);
-
+    const token = await postSubmission(language_id, source_code, std_in);
     const res = await getOutput(token);
 
     const status_name = res.status.description;
-    const decoded_output = decode
+    const decoded_output = decode(res.stdout ? res.stdout : "");
+    const decoded_compile_output = decode(
+      res.compile_output ? res.compile_output : ""
+    );
+    const decoded_error = decode(res.stderr ? res.stderr : "");
+    let final_output = "";
+    if (res.status_id !== 3) {
+      if (decoded_compile_output === "") {
+        final_output = decoded_error;
+      } else {
+        final_output = decoded_compile_output;
+      }
+    } else {
+      final_output = decoded_output;
+    }
+    setCurrentOutput(status_name + "\n\n" + final_output);
+    closeModal();
   };
-  return <div>PlayGround</div>;
+
+  function readFileContent(file) {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (err) => reject(err);
+      reader.readAsText(file);
+    });
+  }
+  const placeFileContent = (file, setState) => {
+    readFileContent(file)
+      .then((content) => {
+        setState(content);
+      })
+      .catch((err) => console.log(err));
+  };
+  const getFile = (e, setState) => {
+    const input = e.target;
+    if ("files" in input && input.files.length > 0) {
+      placeFileContent(input.files[0], setState);
+    }
+  };
+  return (
+    <div>
+      <Navbar />
+      <div className="flex">
+        <div className="w-1/2 h-screen">
+          <EditContainer />
+        </div>
+        <div className="w-1/2 h-screen flex flex-col">
+          <InputConsole />
+          <OutputConsole />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default PlayGround;

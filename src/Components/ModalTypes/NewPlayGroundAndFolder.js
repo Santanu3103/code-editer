@@ -24,7 +24,7 @@ function NewPlayGroundAndFolder() {
   return (
     <>
       <div className="flex flex-row justify-end p-4">
-        <RxCross1 className="cursor-pointer" onClick={() => closeModal} />
+        <RxCross1 className="cursor-pointer" onClick={() => closeModal()} />
       </div>
       <div className="px-6 py-4 mb-8 flex flex-col items-center justify-center gap-6">
         <h2>Create a New PlayGround & New Folder</h2>
