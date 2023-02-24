@@ -131,11 +131,28 @@ function PlayGround() {
       <Navbar />
       <div className="flex">
         <div className="w-1/2 h-screen">
-          <EditContainer />
+          <EditContainer
+            title={title}
+            currentLanguage={currentLanguage}
+            setCurrentLanguage={setCurrentLanguage}
+            currentCode={currentCode}
+            setCurrentCode={setCurrentCode}
+            folderId={folderId}
+            playgroundId={playgroundId}
+            saveCode={saveCode}
+            runCode={runCode}
+            isFullScreen={isFullScreen}
+            setIsFullScreen={setIsFullScreen}
+            getFile={getFile}
+          />
         </div>
         <div className="w-1/2 h-screen flex flex-col">
-          <InputConsole />
-          <OutputConsole />
+          <InputConsole
+            getFile={getFile}
+            currentInput={currentInput}
+            setCurrentInput={setCurrentInput}
+          />
+          <OutputConsole currentOutput={currentOutput} />
         </div>
       </div>
     </div>
