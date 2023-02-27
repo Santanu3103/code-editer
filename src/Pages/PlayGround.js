@@ -8,10 +8,11 @@ import Navbar from "../Components/Playground/Navbar";
 import EditContainer from "../Components/Playground/EditContainer";
 import InputConsole from "../Components/Playground/InputConsole";
 import OutputConsole from "../Components/Playground/OutputConsole";
+import Modal from "../Components/Modal";
 function PlayGround() {
   const { folderId, playgroundId } = useParams();
   const { folders, savePlayground } = useContext(PlaygroundContext);
-  const { openModal, closeModal } = useContext(ModalContext);
+  const { isOpenModal, openModal, closeModal } = useContext(ModalContext);
   const { title, language, code } = folders[folderId].playgrounds[playgroundId];
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [currentCode, setCurrentCode] = useState(code);
@@ -128,9 +129,9 @@ function PlayGround() {
   };
   return (
     <div>
-      <Navbar />
-      <div className="flex">
-        <div className="w-1/2 h-screen">
+      <Navbar isFullScreen={isFullScreen} />
+      <div className="flex flex-row h-full">
+        <div className={`${isFullScreen ? "w-full" : "w-3/4"}`}>
           <EditContainer
             title={title}
             currentLanguage={currentLanguage}
@@ -146,14 +147,17 @@ function PlayGround() {
             getFile={getFile}
           />
         </div>
-        <div className="w-1/2 h-screen flex flex-col">
-          <InputConsole
-            getFile={getFile}
-            currentInput={currentInput}
-            setCurrentInput={setCurrentInput}
-          />
-          <OutputConsole currentOutput={currentOutput} />
-        </div>
+        {!isFullScreen && (
+          <div className="w-1/4">
+            <InputConsole
+              getFile={getFile}
+              currentInput={currentInput}
+              setCurrentInput={setCurrentInput}
+            />
+            <OutputConsole currentOutput={currentOutput} />
+          </div>
+        )}
+        {isOpenModal.show && <Modal />}
       </div>
     </div>
   );
