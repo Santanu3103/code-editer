@@ -102,6 +102,13 @@ function EditContainer({
         </div>
       )}
       {/* CodeEditor */}
+      <CodeEditor
+        currentLanguage={currentLanguage}
+        currentTheme={currentTheme.value}
+        currentCode={currentCode}
+        setCurrentCode={setCurrentCode}
+        isFullScreen={isFullScreen}
+      />
       {/* Home work */}
       {/* Foooter */}
       <div className="bg-white flex w-full justify-between p-4">
