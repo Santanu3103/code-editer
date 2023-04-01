@@ -4,6 +4,7 @@ import { BiEditAlt, BiImport, BiExport, BiFullscreen } from "react-icons/bi";
 import Select from "react-select";
 import { languageMap } from "../../Context/PlaygroundContext";
 import CodeEditor from "./CodeEditor";
+
 function EditContainer({
   title,
   currentLanguage,
@@ -40,9 +41,7 @@ function EditContainer({
   ];
   const [currentTheme, setCurrentTheme] = useState(themeOptions[0]);
 
-  const handleThemeChange = (selectedOption) => {
-    setCurrentTheme(selectedOption);
-  };
+  const handleThemeChange = (selectedOption) => { setCurrentTheme(selectedOption) };
 
   const [language, setLanguage] = useState(() => {
     for (let i = 0; i < languageOptions.length; i++) {
@@ -60,12 +59,10 @@ function EditContainer({
     setCurrentCode(languageMap[selectedOption.value].defaultCode);
   };
   return (
-    <div
-      className={`flex flex-col ${
-        isFullScreen ? "h-[100vh]" : "h-[calc(100vh_-_4.5rem)]"
-      }`}
-    >
+    <div className={ `flex flex-col ${ isFullScreen ? "h-[100vh]" : "h-[calc(100vh_-_4.5rem)]"}` }>
+
       {/* 1st Navbar of edit container */}
+
       {!isFullScreen && (
         <div className="bg-white flex justify-between items-center flex-wrap p-4">
           <div className="flex gap-4 items-center">
@@ -87,33 +84,23 @@ function EditContainer({
               Save Code
             </button>
           </div>
+
           <div className="flex gap-4">
-            <Select
-              options={languageOptions}
-              value={language} // default value or the changing value
-              onChange={handleLanguageChange}
-            />
-            <Select
-              options={themeOptions}
-              value={currentTheme}
-              onChange={handleThemeChange}
-            />
+            <Select options={languageOptions} value={language}  onChange={handleLanguageChange}/>
+            <Select options={themeOptions} value={currentTheme} onChange={handleThemeChange} />
           </div>
+
         </div>
       )}
-      {/* CodeEditor */}
-      <CodeEditor
-        currentLanguage={currentLanguage}
-        currentTheme={currentTheme.value}
+  
+      <CodeEditor currentLanguage={currentLanguage} currentTheme={currentTheme.value}
         currentCode={currentCode}
         setCurrentCode={setCurrentCode}
         isFullScreen={isFullScreen}
       />
-      {/* Home work */}
-      {/* Foooter */}
+     
       <div className="bg-white flex w-full justify-between p-4">
-        <button
-          className="flex gap-3 items-center"
+        <button className="flex gap-3 items-center"
           onClick={() => setIsFullScreen((isFullScreen) => !isFullScreen)}
         >
           <BiFullscreen style={{ fontSize: "1.5 rem" }} />{" "}

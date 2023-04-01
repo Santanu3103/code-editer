@@ -6,10 +6,7 @@ function InputConsole({ currentInput, setCurrentInput, getFile }) {
     <div className="flex flex-col">
       <div className="bg-[#ededed] p-4 flex justify-between">
         <h3 className="font-bold">Input:</h3>
-        <label
-          htmlFor="inputfile"
-          className="flex items-center font-semibold gap-3"
-        >
+        <label htmlFor="inputfile" className="flex items-center font-semibold gap-3">
           <input
             id="inputfile"
             className="hidden"
