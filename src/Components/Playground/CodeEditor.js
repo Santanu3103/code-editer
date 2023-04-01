@@ -59,12 +59,7 @@ function CodeEditor({currentCode, currentLanguage, setCurrentCode, currentTheme,
       value={currentCode}
       height={`${isFullScreen ? "92vh" : "76vh"}`}
       theme={theme}
-      extensions={[
-        language,
-        indentUnit.of("        "),
-        EditorState.tabSize.of(8),
-        EditorState.changeFilter.of(() => true),
-      ]}
+      extensions={[ language, indentUnit.of(" "), EditorState.tabSize.of(8), EditorState.changeFilter.of(() => true),]}
       onChange={(value) => setCurrentCode(value)}
       basicSetup={{
         lineNumbers: true,
