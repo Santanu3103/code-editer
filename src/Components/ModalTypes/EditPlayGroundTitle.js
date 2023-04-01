@@ -3,15 +3,14 @@ import { RxCross1 } from "react-icons/rx";
 import { ModalContext } from "../../Context/ModalContext";
 import { PlaygroundContext } from "../../Context/PlaygroundContext";
 function EditPlayGroundTitle() {
+  
   const { closeModal, isOpenModal } = useContext(ModalContext);
 
   const { editPlaygroundTitle, folders } = useContext(PlaygroundContext);
 
   const { folderId, cardID } = isOpenModal.identifiers;
 
-  const [playgroundTitle, setPlaygroundTitle] = useState(
-    folders[folderId].playgrounds[cardID].title
-  );
+  const [playgroundTitle, setPlaygroundTitle] = useState(folders[folderId].playgrounds[cardID].title);
 
   return (
     <>

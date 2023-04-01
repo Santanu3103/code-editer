@@ -20,6 +20,7 @@
     "@uiw/react-codemirror": "^4.19.9",
     "axios": "^1.3.3",
     "buffer": "^6.0.3",
+    "node-modules": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",

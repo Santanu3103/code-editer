@@ -9,15 +9,25 @@ import EditContainer from "../Components/Playground/EditContainer";
 import InputConsole from "../Components/Playground/InputConsole";
 import OutputConsole from "../Components/Playground/OutputConsole";
 import Modal from "../Components/Modal";
+
 function PlayGround() {
+
   const { folderId, playgroundId } = useParams();
+
   const { folders, savePlayground } = useContext(PlaygroundContext);
+
   const { isOpenModal, openModal, closeModal } = useContext(ModalContext);
+
   const { title, language, code } = folders[folderId].playgrounds[playgroundId];
+
   const [currentLanguage, setCurrentLanguage] = useState(language);
+
   const [currentCode, setCurrentCode] = useState(code);
+
   const [currentInput, setCurrentInput] = useState("");
+
   const [currentOutput, setCurrentOutput] = useState("");
+
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const saveCode = () => {
@@ -32,6 +42,7 @@ function PlayGround() {
   };
   // code, language, input -> token
   const postSubmission = async (language_id, source_code, std_in) => {
+
     const options = {
       method: "POST",
       url: "https://judge0-ce.p.rapidapi.com/submissions",
@@ -48,7 +59,9 @@ function PlayGround() {
         std_in: std_in,
       }),
     };
+
     const res = await axios.request(options);
+
     return res.data.token;
   };
 
@@ -79,6 +92,7 @@ function PlayGround() {
         cardID: "",
       },
     });
+    
     const language_id = languageMap[currentLanguage].id;
     const source_code = encode(currentCode);
     const std_in = encode(currentInput);

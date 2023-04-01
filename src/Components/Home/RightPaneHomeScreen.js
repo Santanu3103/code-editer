@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React,{ useContext } from "react";
 import { FcOpenedFolder } from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
 import { IoTrashOutline } from "react-icons/io5";
